@@ -1,12 +1,14 @@
-Reproducible Research Peer Assessment 1
-============================================
-*Author: Eric Guo*
+---
+title: "Reproducible Research: Peer Assessment 1"
+author: "Eric Guo"
+date: "Monday, December 08, 2014"
+output: html_document
+keep_md: true
+---
 
-*Date: 2014-12-04*
 
 
-
-### Load the data.
+## Loading and preprocessing the data.
 
 
 ```r
@@ -14,7 +16,7 @@ unzip("activity.zip");
 datas <- read.csv(file = "activity.csv", header = TRUE);
 ```
 
-### What is mean total number of steps taken per day?
+## What is mean total number of steps taken per day?
 
 
 ```r
@@ -22,19 +24,16 @@ data <- datas;
 data <- group_by(data, date);
 data <- summarise(data, count = sum(steps, na.rm = TRUE));
 
-ggp <- ggplot(data, aes(x = date, y = count)) + 
-        geom_bar(stat = "identity", fill = "lightblue") +
-        labs(x = "Date", y = "Steps") +
-        labs(title = "Total number of steps taken each day") +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0));
-print(ggp);
+hist(data$count, 
+     main = "Histogram of the total number of steps taken each day",
+     xlab = "Total number of steps taken each day");
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 The mean of total number of steps taken per day is 9354.23. The median of total number of steps taken per day is 10395.
 
-### What is the average daily activity pattern?
+## What is the average daily activity pattern?
 
 
 ```r
@@ -53,7 +52,7 @@ print(ggp);
 
 The 5-minute interval '835' , on average across all the days in the dataset, contains the maximum number of steps.
 
-### Imputing missing values.
+## Imputing missing values.
 
 (1). The total number of missing values in the dataset.
 
@@ -91,19 +90,16 @@ data <- data_new;
 data <- group_by(data, date);
 data <- summarise(data, count = sum(steps, na.rm = TRUE));
 
-ggp <- ggplot(data, aes(x = date, y = count)) + 
-        geom_bar(stat = "identity", fill = "lightblue") +
-        labs(x = "Date", y = "Steps") +
-        labs(title = "Total number of steps taken each day") +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0));
-print(ggp);
+hist(data$count, 
+     main = "Histogram of the total number of steps taken each day",
+     xlab = "Total number of steps taken each day");
 ```
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
 
 The mean of total number of steps taken per day is 10751.74. The median of total number of steps taken per day is 10656. These values are differ from the estimates from the first part of the assignment, and they are increased.
 
-### Are there differences in activity patterns between weekdays and weekends?
+## Are there differences in activity patterns between weekdays and weekends?
 
 (1). Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 

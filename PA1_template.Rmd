@@ -1,41 +1,40 @@
-Reproducible Research Peer Assessment 1
-============================================
-*Author: Eric Guo*
-
-*Date: 2014-12-04*
+---
+title: "Reproducible Research: Peer Assessment 1"
+author: "Eric Guo"
+date: "Monday, December 08, 2014"
+output: html_document
+keep_md: true
+---
 
 ```{r echo=FALSE, results="hide", message=FALSE}
 library(dplyr);
 library(ggplot2);
 ```
 
-### Load the data.
+## Loading and preprocessing the data.
 
-```{r}
+```{r cache=TRUE}
 unzip("activity.zip");
 datas <- read.csv(file = "activity.csv", header = TRUE);
 ```
 
-### What is mean total number of steps taken per day?
+## What is mean total number of steps taken per day?
 
-```{r fig.width=10,fig.height=5}
+```{r}
 data <- datas;
 data <- group_by(data, date);
 data <- summarise(data, count = sum(steps, na.rm = TRUE));
 
-ggp <- ggplot(data, aes(x = date, y = count)) + 
-        geom_bar(stat = "identity", fill = "lightblue") +
-        labs(x = "Date", y = "Steps") +
-        labs(title = "Total number of steps taken each day") +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0));
-print(ggp);
+hist(data$count, 
+     main = "Histogram of the total number of steps taken each day",
+     xlab = "Total number of steps taken each day");
 ```
 
 The mean of total number of steps taken per day is `r format(round(mean(data$count), 2), nsmall = 2)`. The median of total number of steps taken per day is `r median(data$count)`.
 
-### What is the average daily activity pattern?
+## What is the average daily activity pattern?
 
-```{r fig.width=10,fig.height=5}
+```{r}
 data <- datas;
 data <- group_by(data, interval);
 data <- summarise(data, mean = mean(steps, na.rm = TRUE));
@@ -49,7 +48,7 @@ print(ggp);
 
 The 5-minute interval '`r data[data$mean == max(data$mean), 1]`' , on average across all the days in the dataset, contains the maximum number of steps.
 
-### Imputing missing values.
+## Imputing missing values.
 
 (1). The total number of missing values in the dataset.
 
@@ -77,22 +76,19 @@ data_new <- data;
 
 (4). Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
 
-```{r fig.width=10,fig.height=5}
+```{r}
 data <- data_new;
 data <- group_by(data, date);
 data <- summarise(data, count = sum(steps, na.rm = TRUE));
 
-ggp <- ggplot(data, aes(x = date, y = count)) + 
-        geom_bar(stat = "identity", fill = "lightblue") +
-        labs(x = "Date", y = "Steps") +
-        labs(title = "Total number of steps taken each day") +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0));
-print(ggp);
+hist(data$count, 
+     main = "Histogram of the total number of steps taken each day",
+     xlab = "Total number of steps taken each day");
 ```
 
 The mean of total number of steps taken per day is `r format(round(mean(data$count), 2), nsmall = 2)`. The median of total number of steps taken per day is `r median(data$count)`. These values are differ from the estimates from the first part of the assignment, and they are increased.
 
-### Are there differences in activity patterns between weekdays and weekends?
+## Are there differences in activity patterns between weekdays and weekends?
 
 (1). Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
@@ -107,7 +103,7 @@ data$weekday <- as.factor(data$weekday);
 
 (2). Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-```{r fig.width=10,fig.height=5}
+```{r}
 data <- group_by(data, weekday, interval);
 data <- summarise(data, mean = mean(steps, na.rm = TRUE));
 
